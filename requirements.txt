@@ -1,0 +1,8 @@
+pandas==1.5.3
+scikit-learn==1.2.2
+sqlalchemy==2.0.23
+mysql-connector-python==8.2.0
+fastapi==0.103.2
+uvicorn==0.23.2
+mlflow==2.8.1
+schedule==1.2.1
