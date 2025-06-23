@@ -1,6 +1,3 @@
-Here's a clean, professional, and **GitHub-ready `README.md`** for your **Driver Churn Prediction MLOps** project. You can directly copy and paste it:
-
----
 
 ````markdown
 # 🚚 Driver Churn Prediction – MLOps Project
