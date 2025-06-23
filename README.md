@@ -7,7 +7,6 @@ Here's a clean, professional, and **GitHub-ready `README.md`** for your **Driver
 
 An end-to-end MLOps pipeline to predict driver churn for a logistics company (e.g., Porter). This project demonstrates real-world machine learning deployment practices using Python, FastAPI, MySQL, Docker, and MLflow.
 
-Built for a **Data Engineering Intern application**, the project focuses on data engineering, model training, deployment, and monitoring.
 
 ---
 
