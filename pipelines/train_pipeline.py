@@ -17,10 +17,15 @@ def extract_data():
     return data
 
 def transform_data(data):
-    data["hours_worked"] = data["hours_worked"].fillna(data["hours_worked"].median())
+
+    if data["hours_worked"].notnull().any():
+        data["hours_worked"] = data["hours_worked"].fillna(data["hours_worked"].median())
+    else:
+        data["hours_worked"] = data["hours_worked"].fillna(0)
+
     data["city"] = data["city"].str.title()
     data["earnings_per_delivery"] = data["earnings"] / data["deliveries_completed"]
-    data = pd.get_dummies(data, columns=["city"], drop_first=True)
+    data = pd.get_dummies(data, columns=["city"], drop_first=False)
     return data
 
 def train_model(data):
@@ -34,6 +39,9 @@ def train_model(data):
         f1 = f1_score(y_test, y_pred)
         mlflow.log_metric("f1_score", f1)
         mlflow.sklearn.log_model(model, "churn_model")
+        mlflow.log_param("n_estimators", 100)
+        mlflow.log_param("test_size", 0.2)
+        mlflow.set_tag("model", "RandomForestClassifier")
         joblib.dump(model, "models/churn_model.pkl")
         return model, f1
 
