@@ -2,7 +2,7 @@
 ````markdown
 # 🚚 Driver Churn Prediction – MLOps Project
 
-An end-to-end MLOps pipeline to predict driver churn for a logistics company (e.g., Porter). This project demonstrates real-world machine learning deployment practices using Python, FastAPI, MySQL, Docker, and MLflow.
+An MLOps pipeline to predict driver churn for a logistics company like Porter, built for a Data Engineering Intern application. The project uses Python, scikit-learn, FastAPI, MySQL, and MLflow to process driver data, train a Random Forest model, deploy predictions via a REST API, and monitor performance.
 
 
 ---
@@ -36,13 +36,17 @@ An end-to-end MLOps pipeline to predict driver churn for a logistics company (e.
 
 ---
 
-## ⚙️ Setup Instructions
+````
+## ⚙️ Setup
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/driver-churn-prediction-mlops.git
 cd driver-churn-prediction-mlops
+
+
+
 ````
 
 ### 2. Set Up Virtual Environment
@@ -148,9 +152,4 @@ Then open: [http://localhost:8080/docs](http://localhost:8080/docs)
 
 Made by \[Vibhanshu Dubey]. Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/vibhanshudubey/) or [Twitter](https://x.com/vibhanshudubeyycontribute) via pull requests!
 
-```
-
----
-
-Let me know if you want the README to include **badges**, **GIF demo**, or **Google Colab compatibility**!
-```
+``` 
