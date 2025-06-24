@@ -9,13 +9,26 @@ import mlflow.sklearn
 import joblib
 import schedule
 import time
+from io import StringIO
+import boto3
 
 # MySQL connection
 engine = create_engine("mysql+mysqlconnector://root:root@localhost:3306/driver_churn_db")
 
+# S3 configuration
+S3_BUCKET = "churn-data-vibhanshu"
+S3_KEY = "driver_data.csv"
+
 def extract_data():
-    data = pd.read_csv("data/driver_data.csv")
-    return data
+    s3 = boto3.client("s3")
+    try:
+        obj = s3.get_object(Bucket=S3_BUCKET, Key=S3_KEY)
+        csv_content = obj["Body"].read().decode("utf-8")
+        data = pd.read_csv(StringIO(csv_content))
+        return data
+    except Exception as e:
+        print(f"Error reading from S3: {e}")
+        raise
 
 def transform_data(data):
 
@@ -38,17 +51,26 @@ def train_model(data):
     X = data.drop(["driver_id", "churn"], axis=1)
     y = data["churn"]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    with mlflow.start_run():
+
+    mlflow.set_experiment("Driver Churn Prediction")
+
+    with mlflow.start_run(run_name="RandomForest Run"):
         model = RandomForestClassifier(n_estimators=100, random_state=42)
         model.fit(X_train, y_train)
+
         y_pred = model.predict(X_test)
         f1 = f1_score(y_test, y_pred)
+
         mlflow.log_metric("f1_score", f1)
-        mlflow.sklearn.log_model(model, "churn_model")
         mlflow.log_param("n_estimators", 100)
         mlflow.log_param("test_size", 0.2)
         mlflow.set_tag("model", "RandomForestClassifier")
+
+        # Save model
         joblib.dump(model, "models/churn_model.pkl")
+        mlflow.sklearn.log_model(model, "churn_model")
+
+
         return model, f1
 
 def load_predictions(data, model):
@@ -73,7 +95,7 @@ def run_pipeline():
     print(f"Pipeline executed. F1-score: {f1}")
 
 # Schedule pipeline to run daily
-schedule.every(1).days.do(run_pipeline)
+schedule.every(10).minutes.do(run_pipeline)
 
 if __name__ == "__main__":
     run_pipeline()
