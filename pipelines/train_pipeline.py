@@ -1,3 +1,4 @@
+from category_encoders import TargetEncoder
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -25,7 +26,12 @@ def transform_data(data):
 
     data["city"] = data["city"].str.title()
     data["earnings_per_delivery"] = data["earnings"] / data["deliveries_completed"]
-    data = pd.get_dummies(data, columns=["city"], drop_first=False)
+    
+    # Target Encoding for 'city'
+    encoder = TargetEncoder()
+    data["city_encoded"] = encoder.fit_transform(data["city"], data["churn"])
+    data.drop("city", axis=1, inplace=True)
+    
     return data
 
 def train_model(data):
